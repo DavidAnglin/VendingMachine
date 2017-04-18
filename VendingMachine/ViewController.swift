@@ -18,16 +18,25 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
+    
+    let vendingMachine: VendingMachine
+    
+    required init?(coder aDecoder: NSCoder) {
+        do {
+            let dictionary = try PlistConverter.dictionary(fromFile: "VendingInventory", ofType: "plist")
+            let inventory = try InventoryUnarchiver.vendingInventory(fromDictionary: dictionary)
+            self.vendingMachine = FoodVendingMachine(inventory: inventory)
+        } catch let error {
+            fatalError("\(error)")
+        }
+        
+        super.init(coder: aDecoder)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         setupCollectionViewCells()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        print(vendingMachine.inventory)
     }
     
     // MARK: - Setup
@@ -50,7 +59,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // MARK: UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return vendingMachine.selection.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -86,7 +95,5 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             cell.contentView.backgroundColor = selected ? selectedBackgroundColor : defaultBackgroundColor
         }
     }
-    
-    
 }
 
