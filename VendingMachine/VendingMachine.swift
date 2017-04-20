@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum VendingSelection: String {
     case soda
@@ -21,6 +22,10 @@ enum VendingSelection: String {
     case fruitJuice
     case sportsDrink
     case gum
+    
+    func icon() -> UIImage {
+        return UIImage(named: self.rawValue) ?? #imageLiteral(resourceName: "default")
+    }
 }
 
 protocol VendingItem {
