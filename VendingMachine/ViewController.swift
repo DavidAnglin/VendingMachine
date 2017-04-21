@@ -11,16 +11,73 @@ import UIKit
 fileprivate let reuseIdentifier = "vendingItem"
 fileprivate let screenWidth = UIScreen.main.bounds.width
 
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class ViewController: UIViewController {
     
+    // MARK: - Stored Properties -
+    let vendingMachine: VendingMachine
+    var currentSelection: VendingSelection?
+    
+    // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var quantityStepper: UIStepper!
     
-    let vendingMachine: VendingMachine
+    // MARK: - IBActions -
+    @IBAction func purchase() {
+        if let currentSelection = currentSelection {
+            do {
+                try vendingMachine.vend(selection: currentSelection, quantity: Int(quantityStepper.value))
+                updateDisplayWith(balance: vendingMachine.amountDeposited, totalPrice: 0.0, itemPrice: 0, itemQuantity: 1)
+            } catch {
+                // FIXME: Error Handling Code
+            }
+            
+            if let indexPath = collectionView.indexPathsForSelectedItems?.first {
+                collectionView.deselectItem(at: indexPath, animated: true)
+                updateCell(having: indexPath, selected: false)
+            }
+        } else {
+            // FIXME: Alert user to no selection
+        }
+    }
     
+    @IBAction func updateQuantity(_ sender: UIStepper) {
+        let quantity = Int(quantityStepper.value)
+        updateDisplayWith(itemQuantity: quantity)
+        
+        if let currentSelection = currentSelection, let item = vendingMachine.item(forSelection: currentSelection) {
+            updateTotalPrice(for: item)
+        }
+    }
+    
+    // MARK: - Helper Methods -
+    func updateDisplayWith(balance: Double? = nil, totalPrice: Double? = nil, itemPrice: Double? = nil, itemQuantity: Int? = nil) {
+        if let balanceValue = balance {
+            balanceLabel.text = "$\(balanceValue)"
+        }
+        
+        if let totalValue = totalPrice {
+            totalLabel.text = "\(totalValue)"
+        }
+        
+        if let priceValue = itemPrice {
+            priceLabel.text = "\(priceValue)"
+        }
+        
+        if let quantityValue = itemQuantity {
+            quantityLabel.text = "\(quantityValue)"
+        }
+    }
+    
+    func updateTotalPrice(for item: VendingItem) {
+        let totalPrice = item.price * quantityStepper.value
+        updateDisplayWith(totalPrice: totalPrice)
+    }
+    
+    // MARK: - Init -
     required init?(coder aDecoder: NSCoder) {
         do {
             let dictionary = try PlistConverter.dictionary(fromFile: "VendingInventory", ofType: "plist")
@@ -33,14 +90,15 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         super.init(coder: aDecoder)
     }
 
+    // MARK: - View Controller Lifecycle -
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionViewCells()
-        print(vendingMachine.inventory)
+        
+        updateDisplayWith(balance: vendingMachine.amountDeposited, totalPrice: 0, itemPrice: 0, itemQuantity: 1)
     }
     
-    // MARK: - Setup
-
+    // MARK: - Setup -
     func setupCollectionViewCells() {
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 20, right: 0)
@@ -55,8 +113,10 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         collectionView.collectionViewLayout = layout
     }
-    
-    // MARK: UICollectionViewDataSource
+}
+
+// MARK: UICollectionViewDataSource -
+extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return vendingMachine.selection.count
@@ -70,11 +130,22 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         return cell
     }
-    
-    // MARK: - UICollectionViewDelegate
+}
+
+// MARK: - UICollectionViewDelegate -
+extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         updateCell(having: indexPath, selected: true)
+        
+        quantityStepper.value = 1
+        updateDisplayWith(totalPrice: 0, itemQuantity: 1)
+        
+        currentSelection = vendingMachine.selection[indexPath.row]
+        if let currentSelection = currentSelection, let item = vendingMachine.item(forSelection: currentSelection) {
+            let totalPrice = item.price * quantityStepper.value
+            updateDisplayWith(totalPrice: totalPrice, itemPrice: item.price)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

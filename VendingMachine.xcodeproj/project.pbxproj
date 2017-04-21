@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E4F45341EA8686D0063BE4F /* VendingMachineError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4F45331EA8686D0063BE4F /* VendingMachineError.swift */; };
 		2EAC0DF01EA5C97300B0C169 /* InventoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC0DEF1EA5C97300B0C169 /* InventoryError.swift */; };
 		9771F6B51DF0833300B2B06D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9771F6B41DF0833300B2B06D /* AppDelegate.swift */; };
 		9771F6B71DF0833300B2B06D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9771F6B61DF0833300B2B06D /* ViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E4F45331EA8686D0063BE4F /* VendingMachineError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VendingMachineError.swift; sourceTree = "<group>"; };
 		2EAC0DEF1EA5C97300B0C169 /* InventoryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryError.swift; sourceTree = "<group>"; };
 		9771F6B11DF0833300B2B06D /* VendingMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VendingMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9771F6B41DF0833300B2B06D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				2EAC0DEF1EA5C97300B0C169 /* InventoryError.swift */,
+				2E4F45331EA8686D0063BE4F /* VendingMachineError.swift */,
 			);
 			name = "Error Types";
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E4F45341EA8686D0063BE4F /* VendingMachineError.swift in Sources */,
 				9771F6B71DF0833300B2B06D /* ViewController.swift in Sources */,
 				2EAC0DF01EA5C97300B0C169 /* InventoryError.swift in Sources */,
 				9771F6B51DF0833300B2B06D /* AppDelegate.swift in Sources */,
