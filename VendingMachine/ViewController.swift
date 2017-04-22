@@ -8,7 +8,7 @@
 
 import UIKit
 
-fileprivate let reuseIdentifier = "vendingItem"
+fileprivate let reuseIdentifier = Constants.vendingItem
 fileprivate let screenWidth = UIScreen.main.bounds.width
 
 class ViewController: UIViewController {
@@ -31,8 +31,14 @@ class ViewController: UIViewController {
             do {
                 try vendingMachine.vend(selection: currentSelection, quantity: Int(quantityStepper.value))
                 updateDisplayWith(balance: vendingMachine.amountDeposited, totalPrice: 0.0, itemPrice: 0, itemQuantity: 1)
-            } catch {
-                // FIXME: Error Handling Code
+            } catch VendingMachineError.outOfStock {
+                showAlertWith(title: Constants.outOfStock, message: Constants.outOfStockMessage)
+            } catch VendingMachineError.invalidSelection {
+                showAlertWith(title: Constants.invalidSelection, message: Constants.invalidSelectionMessage)
+            } catch VendingMachineError.insufficientFunds(let required) {
+                showAlertWith(title: Constants.insufficientFunds, message: String(format: Constants.insufficientFundsMessage, required))
+            } catch let error {
+                fatalError("\(error)")
             }
             
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
@@ -40,7 +46,7 @@ class ViewController: UIViewController {
                 updateCell(having: indexPath, selected: false)
             }
         } else {
-            // FIXME: Alert user to no selection
+            showAlertWith(title: Constants.invalidSelection, message: Constants.invalidSelectionMessage)
         }
     }
     
@@ -51,6 +57,11 @@ class ViewController: UIViewController {
         if let currentSelection = currentSelection, let item = vendingMachine.item(forSelection: currentSelection) {
             updateTotalPrice(for: item)
         }
+    }
+    
+    @IBAction func depositFunds() {
+        vendingMachine.deposit(5.0)
+        updateDisplayWith(balance: vendingMachine.amountDeposited)
     }
     
     // MARK: - Helper Methods -
@@ -77,10 +88,22 @@ class ViewController: UIViewController {
         updateDisplayWith(totalPrice: totalPrice)
     }
     
+    func showAlertWith(title: String, message: String, style: UIAlertControllerStyle = .alert) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
+        let okAction = UIAlertAction(title: Constants.ok, style: .default, handler: dismissAlert)
+        alertController.addAction(okAction)
+    
+        present(alertController, animated: true, completion: nil)
+    }
+        
+    func dismissAlert(sender: UIAlertAction) -> Void {
+        updateDisplayWith(balance: 0, totalPrice: 0, itemPrice: 0, itemQuantity: 1)
+    }
+        
     // MARK: - Init -
     required init?(coder aDecoder: NSCoder) {
         do {
-            let dictionary = try PlistConverter.dictionary(fromFile: "VendingInventory", ofType: "plist")
+            let dictionary = try PlistConverter.dictionary(fromFile: Constants.vendingMachine, ofType: Constants.pList)
             let inventory = try InventoryUnarchiver.vendingInventory(fromDictionary: dictionary)
             self.vendingMachine = FoodVendingMachine(inventory: inventory)
         } catch let error {

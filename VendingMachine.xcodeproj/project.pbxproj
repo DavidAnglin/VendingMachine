@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2E4F45341EA8686D0063BE4F /* VendingMachineError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4F45331EA8686D0063BE4F /* VendingMachineError.swift */; };
+		2E4F45361EA9BD090063BE4F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4F45351EA9BD090063BE4F /* Constants.swift */; };
+		2E4F45381EA9C6EF0063BE4F /* DepositController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E4F45371EA9C6EF0063BE4F /* DepositController.swift */; };
 		2EAC0DF01EA5C97300B0C169 /* InventoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC0DEF1EA5C97300B0C169 /* InventoryError.swift */; };
 		9771F6B51DF0833300B2B06D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9771F6B41DF0833300B2B06D /* AppDelegate.swift */; };
 		9771F6B71DF0833300B2B06D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9771F6B61DF0833300B2B06D /* ViewController.swift */; };
@@ -21,6 +23,8 @@
 
 /* Begin PBXFileReference section */
 		2E4F45331EA8686D0063BE4F /* VendingMachineError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VendingMachineError.swift; sourceTree = "<group>"; };
+		2E4F45351EA9BD090063BE4F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2E4F45371EA9C6EF0063BE4F /* DepositController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositController.swift; sourceTree = "<group>"; };
 		2EAC0DEF1EA5C97300B0C169 /* InventoryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryError.swift; sourceTree = "<group>"; };
 		9771F6B11DF0833300B2B06D /* VendingMachine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VendingMachine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9771F6B41DF0833300B2B06D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +61,7 @@
 		2EAC0DE91EA5C04800B0C169 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2E4F45371EA9C6EF0063BE4F /* DepositController.swift */,
 				9771F6B61DF0833300B2B06D /* ViewController.swift */,
 			);
 			name = "View Controllers";
@@ -75,6 +80,7 @@
 		2EAC0DEB1EA5C05600B0C169 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2E4F45351EA9BD090063BE4F /* Constants.swift */,
 				9771F6C01DF0833300B2B06D /* Info.plist */,
 				9771F6BB1DF0833300B2B06D /* Assets.xcassets */,
 			);
@@ -213,7 +219,9 @@
 				9771F6B71DF0833300B2B06D /* ViewController.swift in Sources */,
 				2EAC0DF01EA5C97300B0C169 /* InventoryError.swift in Sources */,
 				9771F6B51DF0833300B2B06D /* AppDelegate.swift in Sources */,
+				2E4F45361EA9BD090063BE4F /* Constants.swift in Sources */,
 				9771F6C71DF0A6C000B2B06D /* VendingItemCell.swift in Sources */,
+				2E4F45381EA9C6EF0063BE4F /* DepositController.swift in Sources */,
 				BEF0E7B41DF71E6A001410F7 /* VendingMachine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,5 +10,6 @@ import UIKit
 
 class VendingItemCell: UICollectionViewCell {
     
+    // MARK: - IBOutlets -
     @IBOutlet weak var iconView: UIImageView!
 }

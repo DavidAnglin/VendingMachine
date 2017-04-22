@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+// MARK: - Vending Selection Enum -
 enum VendingSelection: String {
     case soda
     case dietSoda
@@ -28,6 +29,7 @@ enum VendingSelection: String {
     }
 }
 
+// MARK: - Protocols -
 protocol VendingItem {
     var price: Double { get }
     var quantity: Int { get set }
@@ -44,12 +46,17 @@ protocol VendingMachine {
     func item(forSelection selection: VendingSelection) -> VendingItem?
 }
 
+// MARK: - Struct -
 struct Item: VendingItem {
     let price: Double
     var quantity: Int
 }
 
+// MARK: - Classes -
+
+// Plist Converter
 class PlistConverter {
+    /// Converts dictionary from a Plist
     static func dictionary(fromFile name: String, ofType type: String) throws -> [String : AnyObject] {
         guard let path = Bundle.main.path(forResource: name, ofType: type) else {
             throw InventoryError.invalidResource
@@ -63,12 +70,14 @@ class PlistConverter {
     }
 }
 
+// Inventory Unarchiver
 class InventoryUnarchiver {
+    /// Returns available inventory
     static func vendingInventory(fromDictionary dictionary: [String : AnyObject]) throws -> [VendingSelection : VendingItem] {
         var inventory: [VendingSelection : VendingItem] = [:]
         
         for (key, value) in dictionary {
-            if let itemDictionary = value as? [String : Any], let price = itemDictionary["price"] as? Double, let quantity = itemDictionary["quantity"] as? Int {
+            if let itemDictionary = value as? [String : Any], let price = itemDictionary[Constants.price] as? Double, let quantity = itemDictionary[Constants.quantity] as? Int {
                 let item = Item(price: price, quantity: quantity)
                 
                 guard let selection = VendingSelection(rawValue: key) else {
@@ -78,11 +87,11 @@ class InventoryUnarchiver {
                 inventory.updateValue(item, forKey: selection)
             }
         }
-        
         return inventory
     }
 }
 
+// Food Vending Machine
 class FoodVendingMachine: VendingMachine {
     let selection: [VendingSelection] = [.soda, .dietSoda, .chips, .cookie, .wrap, .sandwich, .candyBar, .popTart, .water, .fruitJuice, .sportsDrink, .gum]
     var inventory: [VendingSelection : VendingItem]
@@ -92,6 +101,7 @@ class FoodVendingMachine: VendingMachine {
         self.inventory = inventory
     }
     
+    /// Handles the vending of the vending machine
     func vend(selection: VendingSelection, quantity: Int) throws {
         guard var item = inventory[selection] else {
            throw VendingMachineError.invalidSelection
@@ -113,10 +123,12 @@ class FoodVendingMachine: VendingMachine {
         }
     }
     
+    /// Handles depositing of money
     func deposit(_ amount: Double) {
-        
+        amountDeposited += amount
     }
     
+    /// Returns a Vending Item selected
     func item(forSelection selection: VendingSelection) -> VendingItem? {
         return inventory[selection]
     }
